@@ -270,7 +270,7 @@ ContainerRuntime "1" -- "*" Pod : Executes containers
 
 ### Node Hierachy
 
-<img src="./Assets//Node-Hierachy.svg?sanitize=true">
+<img src="./assets//Node-Hierachy.svg?sanitize=true">
 
 ---
 
