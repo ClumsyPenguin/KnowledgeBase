@@ -43,6 +43,8 @@ Control plane components can be run on any machine in the cluster. However, for 
 
 ## (Worker) Node Components
 
+Node components run on every node, maintaining running pods and providing the Kubernetes runtime environment.
+
 1. **Node** (Component itself)
    * A worker machine in Kubernetes (physical or virtual).
    * Runs containerized applications.
