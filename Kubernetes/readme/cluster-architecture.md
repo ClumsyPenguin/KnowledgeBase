@@ -1,55 +1,12 @@
-# Architecture
+# Cluster Architecture
 
-```mermaid
-classDiagram
+A Kubernetes cluster consists of a control plane plus a set of worker machines, called nodes, that run containerized applications. Every cluster needs at least one worker node in order to run Pods.
 
-    class UI {
+The worker node(s) host the Pods that are the components of the application workload. The control plane manages the worker nodes and the Pods in the cluster. In production environments, the control plane usually runs across multiple computers and a cluster usually runs multiple nodes, providing fault-tolerance and high availability.
 
-    }
+This document outlines the various components you need to have for a complete and working Kubernetes cluster.
 
-    class CLI {
-
-    }
-
-    class MasterNode1 {
-      kube-apiserver
-      kube-controller-manager
-      kube-scheduler
-      etcd
-    }
-
-    class MasterNode2 {
-      kube-apiserver
-      kube-controller-manager
-      kube-scheduler
-      etcd
-    }
-
-    class WorkerNode1 {
-      kubelet
-      kube-proxy
-      containerRuntime
-      pods
-    }
-
-    class WorkerNode2 {
-      kubelet
-      kube-proxy
-      containerRuntime
-      pods
-    }
-
-    class WorkerNode3 {
-      kubelet
-      kube-proxy
-      containerRuntime
-      pods
-    }
-
-    MasterNode1"1" --> "*" WorkerNode1 : manages/schedules
-    MasterNode1 "1" --> "*" WorkerNode2 : manages/schedules
-    MasterNode 1"1" --> "*" WorkerNode3 : manages/schedules
-```
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>Simple overview of cluster architecture</p></figcaption></figure>
 
 ## Control Plane Components (Master node)
 
@@ -130,3 +87,6 @@ Kubelet "1" -- "1" cAdvisor : Integrates with
 Kubelet "1" -- "*" Pod : Manages
 ContainerRuntime "1" -- "*" Pod : Executes containers
 ```
+
+> More information can be found at [https://kubernetes.io/docs/concepts/architecture/](https://kubernetes.io/docs/concepts/architecture/)
+
