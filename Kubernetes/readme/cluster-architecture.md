@@ -10,6 +10,10 @@ This document outlines the various components you need to have for a complete an
 
 ## Control Plane Components (Master node)
 
+The control plane's components make global decisions about the cluster (for example, scheduling), as well as detecting and responding to cluster events (for example, starting up a new [pod](https://kubernetes.io/docs/concepts/workloads/pods/) when a Deployment's [`replicas`](https://kubernetes.io/docs/reference/glossary/?all=true#term-replica) field is unsatisfied).
+
+Control plane components can be run on any machine in the cluster. However, for simplicity, setup scripts typically start all control plane components on the same machine, and do not run user containers on this machine.
+
 1. **API Server (`kube-apiserver`)**
    * The central management entity of Kubernetes.
    * Exposes the Kubernetes API (via REST) - Entrypoint.
