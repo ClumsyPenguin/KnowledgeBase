@@ -1,4 +1,4 @@
-# Core Kubernetes Objects
+# Core Components
 
 ## Pods
 

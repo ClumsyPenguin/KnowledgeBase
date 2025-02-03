@@ -1,4 +1,4 @@
-# Kubernetes Architecture
+# Architecture
 
 ```mermaid
 classDiagram
