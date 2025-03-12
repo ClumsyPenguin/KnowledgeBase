@@ -1,16 +1,17 @@
 using Castle.DynamicProxy;
-using Microsoft.Extensions.Caching.Memory;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace AOP.Interception.Caching.Interceptors;
 
 public class MemoryCacheInterceptor : ICacheInterceptor
 {
-    private readonly IMemoryCache _memoryCache;
+    private readonly IFusionCache _fusionCache;
+    private readonly ILogger<MemoryCacheInterceptor> _logger;
 
-
-    public MemoryCacheInterceptor(IMemoryCache memoryCache)
+    public MemoryCacheInterceptor(IFusionCache fusionCache, ILogger<MemoryCacheInterceptor> logger)
     {
-        _memoryCache = memoryCache;
+        _fusionCache = fusionCache;
+        _logger = logger;
     }
 
     public void InterceptSynchronous(IInvocation invocation)
@@ -18,7 +19,23 @@ public class MemoryCacheInterceptor : ICacheInterceptor
         if (IsCacheable(invocation, out var itemLifeSpan))
         {
             var cacheKey = CacheKeyGenerator.Generate(invocation.Method, invocation.Arguments);
-            invocation.ReturnValue = _memoryCache.Set(GetNonCachedValue(invocation)!, itemLifeSpan);
+            var factoryCalled = false;
+
+            invocation.ReturnValue = _fusionCache.GetOrSet(
+                cacheKey,
+                _ =>
+                {
+                    factoryCalled = true;
+                    _logger.LogInformation("Cache MISS for key '{CacheKey}'", cacheKey);
+                    return GetNonCachedValue(invocation);
+                },
+                options => options.SetDuration(itemLifeSpan)
+            );
+
+            if (!factoryCalled)
+            {
+                _logger.LogInformation("Cache HIT for key '{CacheKey}'", cacheKey);
+            }
         }
         else
         {
@@ -26,10 +43,9 @@ public class MemoryCacheInterceptor : ICacheInterceptor
         }
     }
 
-
     public void InterceptAsynchronous(IInvocation invocation)
     {
-        //This method is one which doesn't return a value, hence no caching desired
+        // The method call is void, so no caching needed
         invocation.Proceed();
     }
 
@@ -49,30 +65,39 @@ public class MemoryCacheInterceptor : ICacheInterceptor
     {
         var proceed = invocation.CaptureProceedInfo();
         var cacheKey = CacheKeyGenerator.Generate(invocation.Method, invocation.Arguments);
-        
-        if (_memoryCache.TryGetValue(cacheKey, out TResult? cachedValue))
-            return cachedValue!;
-        
-        
-        return _memoryCache.Set(cacheKey,
-            _ => GetNonCachedValueAsync<TResult>(proceed, invocation),
-            itemLifeSpan);
+        var factoryCalled = false;
+
+        var result = await _fusionCache.GetOrSetAsync(
+            cacheKey,
+            async _ =>
+            {
+                factoryCalled = true;
+                _logger.LogInformation("Cache MISS for key '{CacheKey}'", cacheKey);
+                return await GetNonCachedValueAsync<TResult>(proceed, invocation);
+            },
+            options => options.SetDuration(itemLifeSpan)
+        );
+
+        if (!factoryCalled)
+        {
+            _logger.LogInformation("Cache HIT for key '{CacheKey}'", cacheKey);
+        }
+
+        return result!;
     }
 
-    private static async Task<TResult> GetNonCachedValueAsync<TResult>(IInvocationProceedInfo proceed, IInvocation invocation)
+    private static async Task<TResult> GetNonCachedValueAsync<TResult>(
+        IInvocationProceedInfo proceed,
+        IInvocation invocation)
     {
         proceed.Invoke();
-
         var task = (Task<TResult>)invocation.ReturnValue!;
-        var result = await task;
-
-        return result;
+        return await task;
     }
 
     private static object? GetNonCachedValue(IInvocation invocation)
     {
         invocation.Proceed();
-
         return invocation.ReturnValue;
     }
 
@@ -80,31 +105,11 @@ public class MemoryCacheInterceptor : ICacheInterceptor
     {
         if (Attribute.IsDefined(invocation.MethodInvocationTarget!, typeof(CacheAttribute)))
         {
-            var cacheAttribute = Attribute.GetCustomAttribute(invocation.MethodInvocationTarget, typeof(CacheAttribute)) as CacheAttribute;
-            itemLifeSpan = cacheAttribute!.ItemLifeSpan;
-
+            itemLifeSpan = (Attribute.GetCustomAttribute(invocation.MethodInvocationTarget!, typeof(CacheAttribute)) as CacheAttribute)!.ItemLifeSpan;
             return true;
         }
 
         itemLifeSpan = TimeSpan.Zero;
         return false;
-    }
-    
-    public async Task<TItem?> GetOrSetAsync<TItem>(
-        IMemoryCache cache,
-        object key,
-        Func<Task<TItem>> factory,
-        TimeSpan absoluteExpirationRelativeToNow)
-    {
-        if (cache.TryGetValue(key, out TItem? cacheEntry))
-        {
-            return cacheEntry;
-        }
-
-        var value = await factory();
-
-        cache.Set(key, value, absoluteExpirationRelativeToNow);
-
-        return value;
     }
 }
