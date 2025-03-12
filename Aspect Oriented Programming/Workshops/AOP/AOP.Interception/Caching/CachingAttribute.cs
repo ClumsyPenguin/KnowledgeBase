@@ -8,10 +8,5 @@ public class CacheAttribute : Attribute
         ItemLifeSpan = TimeSpan.FromMinutes(itemLifeSpanInMinutes);
     }
 
-    public CacheAttribute(double itemLifeSpanInMinutes)
-    {
-        ItemLifeSpan = TimeSpan.FromMinutes(itemLifeSpanInMinutes);
-    }
-
     public TimeSpan ItemLifeSpan { get; }
 }
