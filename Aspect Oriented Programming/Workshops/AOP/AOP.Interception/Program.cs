@@ -30,3 +30,5 @@ app.MapGet("/weatherforecast", async (IWeatherForecastService weatherForecastSer
 
 app.Run();
 
+public partial class Program {}
+
