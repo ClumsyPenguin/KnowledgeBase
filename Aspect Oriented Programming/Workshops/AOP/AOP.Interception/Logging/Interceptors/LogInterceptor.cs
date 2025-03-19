@@ -13,7 +13,7 @@ public class LogInterceptor : ILogInterceptor
 
     public void InterceptSynchronous(IInvocation invocation)
     {
-        LogInformation($"Intercepted method call :{invocation.MethodInvocationTarget?.Name}");
+        _logger.LogInformation($"Intercepted method call: {invocation.MethodInvocationTarget?.Name} from {invocation.InvocationTarget!.ToString()!.Split('.').Last()}");
         
         try
         {
@@ -38,6 +38,8 @@ public class LogInterceptor : ILogInterceptor
 
     private async Task InternalInterceptAsynchronous(IInvocation invocation)
     {
+        _logger.LogInformation($"Intercepted method call: {invocation.MethodInvocationTarget?.Name} from {invocation.InvocationTarget!.ToString()!.Split('.').Last()}");
+
         try
         {
             invocation.Proceed();
@@ -53,6 +55,8 @@ public class LogInterceptor : ILogInterceptor
 
     private async Task<TResult> InternalInterceptAsynchronous<TResult>(IInvocation invocation)
     {
+        _logger.LogInformation($"Intercepted method call: {invocation.MethodInvocationTarget?.Name} from {invocation.InvocationTarget!.ToString()!.Split('.').Last()}");
+
         try
         {
             invocation.Proceed();

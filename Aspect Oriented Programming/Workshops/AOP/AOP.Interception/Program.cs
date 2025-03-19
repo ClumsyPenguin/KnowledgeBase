@@ -2,11 +2,14 @@ using AOP.Interception.WeatherForecast.Config;
 using AOP.Interception.WeatherForecast.Services;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using ZiggyCreatures.Caching.Fusion;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMemoryCache();
+builder.Services.AddFusionCache().WithRegisteredMemoryCache();
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(GeneralDiConfigLoader.Load);
@@ -26,4 +29,6 @@ app.MapGet("/weatherforecast", async (IWeatherForecastService weatherForecastSer
     .WithOpenApi();
 
 app.Run();
+
+public partial class Program {}
 

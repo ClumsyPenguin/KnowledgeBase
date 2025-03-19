@@ -2,5 +2,5 @@ namespace AOP.Interception.WeatherForecast.Repositories;
 
 public interface IWeatherForecastRepository
 {
-    public Models.WeatherForecast GetWeatherForecast();
+    public Task<Models.WeatherForecast> GetWeatherForecast();
 }

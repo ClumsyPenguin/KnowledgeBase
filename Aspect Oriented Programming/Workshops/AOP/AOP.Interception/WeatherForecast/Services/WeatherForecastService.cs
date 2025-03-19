@@ -11,10 +11,8 @@ public class WeatherForecastService : IWeatherForecastService
         _forecastRepository = forecastRepository;
     }
     
-    public Task<Models.WeatherForecast> GetWeatherForecast()
+    public async Task<Models.WeatherForecast> GetWeatherForecast()
     {
-        var forecast = _forecastRepository.GetWeatherForecast();
-        
-        return Task.FromResult(forecast);
+        return await _forecastRepository.GetWeatherForecast();
     }
 }
