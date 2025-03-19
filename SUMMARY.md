@@ -5,3 +5,4 @@
   * [.NET implementations](aspect-oriented-programming/.net-implementations.md)
   * [Interception](aspect-oriented-programming/interception.md)
   * [IL Weaving](aspect-oriented-programming/il-weaving.md)
+  * [The cost](aspect-oriented-programming/the-cost.md)
