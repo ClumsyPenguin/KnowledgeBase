@@ -1,8 +1,4 @@
----
-icon: '3'
----
-
-# Interception
+# Implementation
 
 ### Interceptor
 
