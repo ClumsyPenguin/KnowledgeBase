@@ -4,6 +4,8 @@ icon: '5'
 
 # The cost
 
+### Interception
+
 <figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption><p>NBomber load test (50 parallel runs with ramping and warm-up)</p></figcaption></figure>
 
 ```markdown
@@ -20,4 +22,10 @@ InvocationCount=1  UnrollFactor=1
 | InterceptedCall | 1,612.17 μs | 157.311 μs | 451.356 μs | 568.69 KB |
 | PlainCall       |    11.47 μs |   0.339 μs |   0.983 μs |  17.91 KB |
 ```
+
+### IL Weaving
+
+* The "Aspect" is not visible until you compile/ship the code
+
+
 
