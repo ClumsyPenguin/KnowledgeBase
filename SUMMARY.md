@@ -7,4 +7,5 @@
     * [Flow](aspect-oriented-programming/interception/flow.md)
     * [Implementation](aspect-oriented-programming/interception/implementation.md)
   * [IL Weaving](aspect-oriented-programming/il-weaving.md)
+  * [Usages](aspect-oriented-programming/usages.md)
   * [The cost](aspect-oriented-programming/the-cost.md)

@@ -1,5 +1,5 @@
 ---
-icon: '5'
+icon: '6'
 ---
 
 # The cost
@@ -26,6 +26,5 @@ InvocationCount=1  UnrollFactor=1
 ### IL Weaving
 
 * The "Aspect" is not visible until you compile/ship the code
-
-
+* Tools for design-time support are sparse
 
