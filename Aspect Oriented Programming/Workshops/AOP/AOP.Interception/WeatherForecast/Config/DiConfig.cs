@@ -16,7 +16,7 @@ public class DiConfig : Module
         
         //interceptors
         builder.RegisterType<LogInterceptor>().As<ILogInterceptor>();
-        builder.RegisterType<MemoryCacheInterceptor>().As<ICacheInterceptor>();
+        builder.RegisterType<TieredCacheInterceptor>().As<ICacheInterceptor>();
         
         //dependencies
         builder.RegisterTypeWithInterception<WeatherForecastService, IWeatherForecastService>(typeof(ILogInterceptor));
