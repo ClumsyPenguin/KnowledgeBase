@@ -28,6 +28,10 @@ app.MapGet("/weatherforecast", async (IWeatherForecastService weatherForecastSer
     .WithName("GetWeatherForecast")
     .WithOpenApi();
 
+app.MapGet("/failure", async (IWeatherForecastService weatherForecastService) => await weatherForecastService.FailingMethod())
+    .WithName("FailingMethod")
+    .WithOpenApi();
+
 app.Run();
 
 public partial class Program {}

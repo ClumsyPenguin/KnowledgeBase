@@ -15,4 +15,9 @@ public class WeatherForecastService : IWeatherForecastService
     {
         return await _forecastRepository.GetWeatherForecast();
     }
+
+    public Task<Models.WeatherForecast> FailingMethod()
+    {
+        throw new Exception("This is a transient Error, please try again");
+    }
 }
