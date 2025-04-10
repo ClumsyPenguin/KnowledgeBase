@@ -10,7 +10,6 @@ namespace AOP.Interception.WeatherForecast.Repositories;
         public async Task<Models.WeatherForecast> GetWeatherForecast()
         { 
             await Task.Delay(Random.Next(30, 150)); 
-            
             return new Models.WeatherForecast(DateOnly.FromDateTime(DateTime.UtcNow), 21, "Breezy light workshop weather"); 
         }
     }

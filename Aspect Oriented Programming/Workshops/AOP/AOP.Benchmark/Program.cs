@@ -25,9 +25,7 @@ public class Config : ManualConfig
         AddLogger(ConsoleLogger.Default);
         AddColumnProvider(DefaultColumnProviders.Instance);
 
-        AddExporter(HtmlExporter.Default);
-        AddExporter(CsvExporter.Default);
-        AddExporter(RPlotExporter.Default);
+        AddExporter(MarkdownExporter.GitHub);
 
         AddDiagnoser(MemoryDiagnoser.Default);
         AddAnalyser(EnvironmentAnalyser.Default);
@@ -61,7 +59,7 @@ public class WeatherForecastBenchmark
     [Benchmark]
     public async Task InterceptedCall()
     {
-        for (var i = 0; i < 1000; i++)
+        for (var i = 0; i < 100; i++)
         {
             await _interceptedService.GetWeatherForecast();
         }
@@ -70,7 +68,7 @@ public class WeatherForecastBenchmark
     [Benchmark]
     public async Task PlainCall()
     {
-        for (var i = 0; i < 1000; i++)
+        for (var i = 0; i < 100; i++)
         {
             await _plainService.GetWeatherForecast();
         }

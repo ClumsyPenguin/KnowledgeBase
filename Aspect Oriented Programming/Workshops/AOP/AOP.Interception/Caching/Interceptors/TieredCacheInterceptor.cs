@@ -3,12 +3,12 @@ using ZiggyCreatures.Caching.Fusion;
 
 namespace AOP.Interception.Caching.Interceptors;
 
-public class MemoryCacheInterceptor : ICacheInterceptor
+public class TieredCacheInterceptor : ICacheInterceptor
 {
     private readonly IFusionCache _fusionCache;
-    private readonly ILogger<MemoryCacheInterceptor> _logger;
+    private readonly ILogger<TieredCacheInterceptor> _logger;
 
-    public MemoryCacheInterceptor(IFusionCache fusionCache, ILogger<MemoryCacheInterceptor> logger)
+    public TieredCacheInterceptor(IFusionCache fusionCache, ILogger<TieredCacheInterceptor> logger)
     {
         _fusionCache = fusionCache;
         _logger = logger;
